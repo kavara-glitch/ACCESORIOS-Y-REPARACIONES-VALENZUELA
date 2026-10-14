@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel del dueño | NEXORA ACCESS</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="admin">
+<header class="top"><div class="wrap bar">
+  <a class="logo" href="index.html"><span class="dot"></span>NEXORA <b>ACCESS</b></a>
+  <span class="lead">Panel del dueño</span>
+  <a class="btn ghost" href="index.html" style="margin-left:auto">Ver tienda</a>
+  <button class="btn ghost" id="logout" hidden>Salir</button>
+</div></header>
+
+<main class="wrap sec">
+<section id="gate">
+  <h2>Ingresar</h2>
+  <form class="finder" id="login">
+    <label>Contraseña<input type="password" id="pass" autocomplete="current-password"></label>
+    <button class="btn pri" type="submit">Entrar</button>
+  </form>
+  <p class="err" id="loginErr"></p>
+  <p class="note">Contraseña de demostración: nexora2026. Es solo un prototipo, no ofrece seguridad real.</p>
+</section>
+
+<section id="panel" hidden>
+  <h2 id="formTitle">Agregar producto</h2>
+  <form id="pform" class="pform" novalidate>
+    <label>Nombre<input name="n"></label>
+    <label>Precio ($)<input name="p" type="number" min="0.01" step="0.01"></label>
+    <label>Categoría<select name="c" id="fc"></select></label>
+    <label>Conexión<select name="conn"><option value="">No aplica</option><option>USB-C</option><option>Micro-USB</option></select></label>
+    <label class="wide">Descripción<input name="d"></label>
+    <label>Estilo (fundas)<select name="style"><option>minimalista</option><option>elegante</option><option>transparente</option><option>juvenil</option></select></label>
+    <label class="wide">Colores (fundas)<span class="checks" id="fcols"></span></label>
+    <label class="wide">Modelos compatibles (fundas y protectores; vacío = sin confirmar)<span class="checks" id="fmodels"></span></label>
+    <label class="chk"><input type="checkbox" name="off"> Ocultar de la tienda</label>
+    <div class="actions"><button class="btn pri" type="submit">Guardar producto</button><button class="btn ghost dark" type="button" id="cancel">Cancelar</button></div>
+    <p class="err" id="perr" role="alert"></p>
+  </form>
+
+  <h2>Productos</h2>
+  <div class="tbl"><table><thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Estado</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+  <p class="note">Los cambios se guardan en este navegador. Para que otros clientes los vean se necesita un servidor.</p>
+  <button class="btn ghost dark" id="reset">Restaurar productos de ejemplo</button>
+</section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

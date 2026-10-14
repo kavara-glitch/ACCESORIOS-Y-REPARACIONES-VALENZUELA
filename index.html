@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXORA ACCESS | Pequeños accesorios. Grandes conexiones.</title>
+<meta name="description" content="Prototipo de boutique de accesorios electrónicos: cables, fundas, cargadores, baterías y más.">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#catalogo">Saltar al catálogo</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="#inicio" aria-label="NEXORA ACCESS, inicio"><span class="dot"></span>NEXORA <b>ACCESS</b></a>
+    <button class="icon menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">☰</button>
+    <nav id="nav" aria-label="Principal">
+      <a href="#inicio">Inicio</a><a href="#catalogo">Catálogo</a><a href="#categorias">Categorías</a>
+      <a href="#ofertas">Ofertas</a><a href="#nosotros">Nosotros</a><a href="#contacto">Contacto</a>
+    </nav>
+    <input type="search" id="q" placeholder="Buscar accesorio" aria-label="Buscar por nombre">
+    <button class="cart-btn" id="cartBtn" aria-label="Abrir carrito">Carrito <span id="cartCount">0</span></button>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="inicio">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="tag">Pequeños accesorios. Grandes conexiones.</p>
+      <h1>Todo lo que tu dispositivo necesita, en un solo lugar</h1>
+      <p class="lead">Encuentra cables, fundas, cargadores y accesorios para mantener tus dispositivos protegidos, conectados y listos para cada día.</p>
+      <div class="actions"><a class="btn pri" href="#catalogo">Explorar accesorios</a><a class="btn ghost" href="#ofertas">Ver ofertas</a></div>
+    </div>
+    <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="wrap sec" id="categorias">
+  <h2>Categorías</h2>
+  <div class="cats" id="cats"></div>
+</section>
+
+<section class="light">
+<div class="wrap sec" id="catalogo">
+  <h2>Catálogo</h2>
+  <p class="note">Productos, precios y compatibilidades son datos de demostración y deben verificarse antes de una venta real.</p>
+  <div class="filters">
+    <div class="chips" id="chips" role="group" aria-label="Filtrar por categoría"></div>
+    <label>Precio máximo: <output id="maxOut">$20.00</output>
+      <input type="range" id="max" min="1" max="20" step="0.5" value="20"></label>
+    <label>Ordenar
+      <select id="sort"><option value="">Destacados</option><option value="asc">Precio: menor a mayor</option><option value="desc">Precio: mayor a menor</option></select></label>
+    <button class="btn ghost dark" id="favOnly" aria-pressed="false">Solo favoritos</button>
+  </div>
+  <div class="grid" id="grid" aria-live="polite"></div>
+</div>
+
+<div class="wrap sec" id="encuentra">
+  <h2>Encuentra tu accesorio</h2>
+  <p class="note">Filtra con reglas y datos registrados en el catálogo. No usa inteligencia artificial.</p>
+  <form class="finder" id="finder">
+    <label>Dispositivo<select name="dev"><option>Teléfono celular</option></select></label>
+    <label>Modelo<select name="model" id="fModel"><option value="">Cualquiera</option></select></label>
+    <label>Conexión<select name="conn"><option value="">Cualquiera</option><option>USB-C</option><option>Micro-USB</option></select></label>
+    <label>Accesorio<select name="acc" id="fAcc"></select></label>
+    <label>Presupuesto máximo ($)<input type="number" name="budget" min="1" step="0.5" value="6"></label>
+    <button class="btn pri" type="submit">Buscar</button>
+  </form>
+  <div class="grid" id="fResult" aria-live="polite"></div>
+</div>
+
+<div class="wrap sec" id="estilo">
+  <h2>Tu celular, tu estilo</h2>
+  <form class="finder" id="styler">
+    <label>Color<select name="color" id="sColor"><option value="">Todos</option></select></label>
+    <label>Estilo<select name="style"><option value="">Todos</option><option>minimalista</option><option>elegante</option><option>transparente</option><option>juvenil</option></select></label>
+    <label>Modelo<select name="model" id="sModel"><option value="">Todos</option></select></label>
+    <label>Precio máximo ($)<input type="number" name="max" min="1" step="0.5" value="10"></label>
+  </form>
+  <div class="style-grid">
+    <div class="grid" id="sGrid" aria-live="polite"></div>
+    <aside class="preview" id="preview" aria-live="polite"></aside>
+  </div>
+</div>
+</section>
+
+<section class="wrap sec" id="ofertas">
+  <h2>Ofertas y paquetes</h2>
+  <p class="note">Promociones ilustrativas. Condición: válidas solo en este prototipo, sujetas a verificar compatibilidad.</p>
+  <div class="grid" id="bundles"></div>
+</section>
+
+<section class="dark-sec" id="nosotros">
+  <div class="wrap sec about">
+    <div><h2>Sobre nosotros</h2>
+      <p>NEXORA ACCESS es una propuesta comercial en desarrollo. Busca resolver un problema cotidiano: es difícil encontrar accesorios organizados por tipo, precio y compatibilidad.</p>
+      <p><b>Misión.</b> Ofrecer accesorios electrónicos prácticos y accesibles que ayuden a proteger, conectar y aprovechar mejor los dispositivos cotidianos.</p>
+      <p><b>Visión.</b> Convertirse en una boutique reconocida por la variedad de accesorios, la atención al cliente y una experiencia de compra sencilla.</p></div>
+    <ul class="values"><li>Honestidad</li><li>Calidad</li><li>Innovación</li><li>Responsabilidad</li><li>Atención al cliente</li></ul>
+  </div>
+</section>
+
+<section class="light">
+<div class="wrap sec" id="contacto">
+  <h2>Contacto y ayuda</h2>
+  <div class="contact">
+    <form id="form" novalidate>
+      <label>Nombre<input name="nombre" autocomplete="name"><small class="err" data-for="nombre"></small></label>
+      <label>Correo<input name="correo" type="email" autocomplete="email"><small class="err" data-for="correo"></small></label>
+      <label>Consulta<textarea name="consulta" rows="4"></textarea><small class="err" data-for="consulta"></small></label>
+      <button class="btn pri" type="submit">Enviar consulta</button>
+      <p class="ok" id="formOk" role="status"></p>
+      <p class="note">Contacto demostrativo: no se muestran dirección ni teléfono reales.</p>
+    </form>
+    <div class="faq">
+      <details><summary>¿Cómo elijo un cable o cargador?</summary><p>Revisa el tipo de conector de tu dispositivo (USB-C, Micro-USB) y la potencia que indica su fabricante. Un cargador de mayor potencia suele ser seguro si el dispositivo regula lo que recibe, pero confirma en el manual.</p></details>
+      <details><summary>¿Cómo compruebo si una funda o protector me sirve?</summary><p>Busca el modelo exacto en la parte trasera o en Ajustes. Compara su nombre con la lista de modelos del producto antes de comprar.</p></details>
+      <details><summary>¿Esta tienda vende de verdad?</summary><p>No. Es un prototipo académico: no procesa pagos ni envía pedidos.</p></details>
+      <details><summary>¿Los datos de compatibilidad son confiables?</summary><p>Son de demostración. En un negocio real se validarían con la ficha del proveedor.</p></details>
+    </div>
+  </div>
+</div>
+</section>
+</main>
+
+<footer><div class="wrap">NEXORA ACCESS · Prototipo académico · Pequeños accesorios. Grandes conexiones. · <a href="admin.html">Administrar</a></div></footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Carrito de compras" aria-hidden="true">
+  <div class="drawer-head"><h2>Tu carrito</h2><button class="icon" data-act="close-cart" aria-label="Cerrar carrito">✕</button></div>
+  <div id="cartItems"></div>
+  <div class="drawer-foot">
+    <p class="total">Total <b id="cartTotal">$0.00</b></p>
+    <button class="btn pri" data-act="summary" id="toSummary">Continuar al resumen</button>
+    <button class="btn ghost dark" data-act="clear">Vaciar carrito</button>
+  </div>
+</aside>
+
+<dialog id="dlg"><div id="dlgBody"></div><form method="dialog"><button class="btn ghost dark">Cerrar</button></form></dialog>
+<div class="toast" id="toast" role="status"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
