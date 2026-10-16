@@ -7,8 +7,8 @@ const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } cat
 //--------
 const CATS = {
   cables: 'Cables y conexiones', fundas: 'Fundas para celulares', cargadores: 'Cargadores y adaptadores',
-  baterias: 'Baterías externas y compatibles', protectores: 'Protectores de pantalla',
-  soportes: 'Soportes para celulares', audifonos: 'Audífonos y accesorios adicionales'
+  baterias: 'Baterías externas', reemplazo: 'Baterías de reemplazo compatibles', protectores: 'Protectores de pantalla',
+  soportes: 'Soportes para celulares', audifonos: 'Audífonos', extras: 'Accesorios adicionales'
 };
 const MODELS = ['Galaxy A15', 'Redmi 13', 'iPhone 13', 'Moto G54'];
 const COLORS = { Negro: '#1b1f2a', Azul: '#2b5cff', Verde: '#2fbf8a', Transparente: '#dfe8f3', Rosa: '#ff7ab8', Blanco: '#f4f7fb' };
@@ -31,7 +31,7 @@ const DEFAULTS = [
 DEFAULTS.forEach(p => {
   if (p.c === 'fundas') p.opts = [['Color', p.cols], ['Modelo', p.models]];
 });
-const ALL = load('nx_products', null) || DEFAULTS;
+const ALL = load('val_products', null) || DEFAULTS;
 const PRODUCTS = ALL.filter(p => !p.off);
 const byId = id => ALL.find(p => p.id === id);
 
@@ -39,4 +39,20 @@ const BUNDLES = [
   { id: 'b1', n: 'Cable USB-C + cargador', items: ['p1', 'p3'], price: 12.99, cond: 'Cable de 1 m. Verificar compatibilidad con tu dispositivo.' },
   { id: 'b2', n: 'Funda + protector de pantalla', items: ['p2', 'p4'], price: 9.99, cond: 'Elige modelo al ver los productos individuales; paquete demostrativo.' },
   { id: 'b3', n: 'Adaptador + cable de carga', items: ['p6', 'p1'], price: 7.99, cond: 'Sujeto a verificar tipo de conexión.' }
+];
+
+//--------
+const BUSINESS = { name: 'Accesorios y reparaciones Valenzuela', owner: 'Raúl Ramos', phone: '7818-9762', intl: '50378189762' };
+const waLink = text => 'https://wa.me/' + BUSINESS.intl + (text ? '?text=' + encodeURIComponent(text) : '');
+const INFO_MSG = 'Hola, me gustaría obtener información sobre los productos y servicios de ' + BUSINESS.name;
+
+//--------
+const SERVICES = [
+  { id: 's1', n: 'Diagnóstico de dispositivos', d: 'Revisión inicial para identificar qué le ocurre al equipo.' },
+  { id: 's2', n: 'Revisión de problemas de carga', d: 'Consulta por equipos que no cargan o cargan con dificultad.' },
+  { id: 's3', n: 'Reemplazo de componentes compatibles', d: 'Consulta por cambio de piezas compatibles con tu dispositivo.' },
+  { id: 's4', n: 'Reparación de pantallas', d: 'Consulta por pantallas dañadas o con fallas.' },
+  { id: 's5', n: 'Revisión de baterías', d: 'Consulta por baterías que duran poco o presentan fallas.' },
+  { id: 's6', n: 'Solución de fallas de conexión', d: 'Consulta por problemas de conexión del equipo.' },
+  { id: 's7', n: 'Otras reparaciones electrónicas', d: 'Cuéntanos tu caso y el negocio te indicará si puede revisarlo.' }
 ];

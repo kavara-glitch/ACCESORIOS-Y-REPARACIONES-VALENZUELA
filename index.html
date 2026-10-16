@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NEX-Level(aun no hay nombre) ACCESS | Pequeños accesorios. Grandes conexiones.</title>
-<meta name="description" content="Prototipo de boutique de accesorios electrónicos: cables, fundas, cargadores, baterías y más.">
+<title>Accesorios y reparaciones Valenzuela | El Salvador</title>
+<meta name="description" content="Accesorios para dispositivos y consultas de reparación en Accesorios y reparaciones Valenzuela. Pedidos y consultas por WhatsApp.">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -12,13 +12,17 @@
 
 <header class="top">
   <div class="wrap bar">
-    <a class="logo" href="#inicio" aria-label="NEXORA ACCESS, inicio"><span class="dot"></span>NEXORA <b>ACCESS</b></a>
+    <a class="logo" href="#inicio" aria-label="Accesorios y reparaciones Valenzuela, inicio">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="#45E7F5" stroke-width="2"/><path d="M9 16h5l2-5 3 10 2-5h3" fill="none" stroke="#45E7F5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><small>Accesorios y reparaciones</small><b>Valenzuela</b></span>
+    </a>
     <button class="icon menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">☰</button>
     <nav id="nav" aria-label="Principal">
-      <a href="#inicio">Inicio</a><a href="#catalogo">Catálogo</a><a href="#categorias">Categorías</a>
+      <a href="#inicio">Inicio</a><a href="#catalogo">Accesorios</a><a href="#reparacion">Servicios de reparación</a>
       <a href="#ofertas">Ofertas</a><a href="#nosotros">Nosotros</a><a href="#contacto">Contacto</a>
     </nav>
-    <input type="search" id="q" placeholder="Buscar accesorio" aria-label="Buscar por nombre">
+    <input type="search" id="q" placeholder="Buscar producto" aria-label="Buscar productos por nombre">
+    <button class="cart-btn" data-act="go-favs" aria-label="Ver favoritos">♥ <span id="favCount">0</span></button>
     <button class="cart-btn" id="cartBtn" aria-label="Abrir carrito">Carrito <span id="cartCount">0</span></button>
   </div>
 </header>
@@ -27,10 +31,15 @@
 <section class="hero" id="inicio">
   <div class="wrap hero-grid">
     <div>
-      <p class="tag">Pequeños accesorios. Grandes conexiones.</p>
-      <h1>Todo lo que tu dispositivo necesita, en un solo lugar</h1>
-      <p class="lead">Encuentra cables, fundas, cargadores y accesorios para mantener tus dispositivos protegidos, conectados y listos para cada día.</p>
-      <div class="actions"><a class="btn pri" href="#catalogo">Explorar accesorios</a><a class="btn ghost" href="#ofertas">Ver ofertas</a></div>
+      <p class="tag">Accesorios y reparaciones Valenzuela</p>
+      <h1>Tus dispositivos, conectados y en buenas manos</h1>
+      <p class="lead">Encuentra accesorios para tus dispositivos y consulta nuestros servicios de reparación en Accesorios y reparaciones Valenzuela.</p>
+      <div class="actions">
+        <a class="btn pri" href="#catalogo">Explorar accesorios</a>
+        <a class="btn ghost" href="#reparacion">Consultar reparación</a>
+        <a class="btn wa" data-wa href="https://wa.me/50378189762" target="_blank" rel="noopener">Contactar por WhatsApp</a>
+      </div>
+      <p class="mini">Pedidos y consultas por WhatsApp. La web no procesa pagos.</p>
     </div>
     <div class="hero-art" id="heroArt" aria-hidden="true"></div>
   </div>
@@ -43,22 +52,27 @@
 
 <section class="light">
 <div class="wrap sec" id="catalogo">
-  <h2>Catálogo</h2>
-  <p class="note">Productos, precios y compatibilidades son datos de demostración y deben verificarse antes de una venta real.</p>
+  <h2>Accesorios</h2>
+  <p class="demo-note">Productos, precios, imágenes y compatibilidades son <b>datos de demostración</b> hasta que el propietario registre los reales.</p>
   <div class="filters">
     <div class="chips" id="chips" role="group" aria-label="Filtrar por categoría"></div>
     <label>Precio máximo: <output id="maxOut">$20.00</output>
       <input type="range" id="max" min="1" max="20" step="0.5" value="20"></label>
     <label>Ordenar
-      <select id="sort"><option value="">Destacados</option><option value="asc">Precio: menor a mayor</option><option value="desc">Precio: mayor a menor</option></select></label>
-    <button class="btn ghost dark" id="favOnly" aria-pressed="false">Solo favoritos</button>
+      <select id="sort"><option value="">Destacados</option><option value="asc">Precio: menor a mayor</option><option value="desc">Precio: mayor a menor</option><option value="name">Nombre: A-Z</option></select></label>
   </div>
   <div class="grid" id="grid" aria-live="polite"></div>
 </div>
 
+<div class="wrap sec" id="favoritos">
+  <h2>Mis favoritos</h2>
+  <p class="note">Se guardan solo en este navegador; no se comparten entre dispositivos.</p>
+  <div class="grid" id="favGrid" aria-live="polite"></div>
+</div>
+
 <div class="wrap sec" id="encuentra">
   <h2>Encuentra tu accesorio</h2>
-  <p class="note">Filtra con reglas y datos registrados en el catálogo. No usa inteligencia artificial.</p>
+  <p class="note">Filtra con reglas y datos registrados en el catálogo. Los datos de compatibilidad son de demostración y deben verificarse.</p>
   <form class="finder" id="finder">
     <label>Dispositivo<select name="dev"><option>Teléfono celular</option></select></label>
     <label>Modelo<select name="model" id="fModel"><option value="">Cualquiera</option></select></label>
@@ -87,52 +101,87 @@
 
 <section class="wrap sec" id="ofertas">
   <h2>Ofertas y paquetes</h2>
-  <p class="note">Promociones ilustrativas. Condición: válidas solo en este prototipo, sujetas a verificar compatibilidad.</p>
+  <p class="demo-note"><b>Demostración:</b> estos paquetes no son ofertas vigentes. El propietario debe confirmar cualquier promoción.</p>
   <div class="grid" id="bundles"></div>
+</section>
+
+<section class="light" id="reparacion">
+<div class="wrap sec">
+  <h2>Servicios de reparación</h2>
+  <p class="demo-note">Servicios <b>pendientes de confirmación</b>: el negocio indicará por WhatsApp cuáles puede atender, además de precio y tiempo.</p>
+  <div class="services" id="services"></div>
+
+  <h2 class="sub" id="consulta">Consulta tu reparación</h2>
+  <div class="contact">
+    <form id="rform" novalidate>
+      <label>Nombre<input name="nombre" autocomplete="name"><small class="err" data-for="nombre"></small></label>
+      <label>Tipo de dispositivo<select name="tipo"><option value="">Elige una opción</option><option>Teléfono celular</option><option>Tableta</option><option>Computadora portátil</option><option>Audífonos</option><option>Otro</option></select><small class="err" data-for="tipo"></small></label>
+      <label>Marca<input name="marca"><small class="err" data-for="marca"></small></label>
+      <label>Modelo<input name="modelo"><small class="err" data-for="modelo"></small></label>
+      <label>Problema que presenta<textarea name="problema" rows="3"></textarea><small class="err" data-for="problema"></small></label>
+      <label>Servicio que deseas consultar<select name="servicio" id="rService"><option value="">Elige una opción</option></select><small class="err" data-for="servicio"></small></label>
+      <label>Comentarios adicionales (opcional)<textarea name="comentarios" rows="2"></textarea></label>
+      <button class="btn pri" type="submit">Revisar mi consulta</button>
+    </form>
+    <div class="rpreview" id="rBox" aria-live="polite">
+      <h3>Resumen de tu consulta</h3>
+      <p class="note">Completa el formulario para ver aquí el mensaje que se preparará.</p>
+      <pre id="rPreview" hidden></pre>
+      <button class="btn wa" id="rOpen" type="button" hidden>Consultar reparación por WhatsApp</button>
+      <p class="note" id="rNote" hidden>Se abrirá WhatsApp con el mensaje listo. Debes enviarlo tú y esperar la respuesta del negocio.</p>
+    </div>
+  </div>
+</div>
 </section>
 
 <section class="dark-sec" id="nosotros">
   <div class="wrap sec about">
     <div><h2>Sobre nosotros</h2>
-      <p>NEXORA ACCESS es una propuesta comercial en desarrollo. Busca resolver un problema cotidiano: es difícil encontrar accesorios organizados por tipo, precio y compatibilidad.</p>
-      <p><b>Misión.</b> Ofrecer accesorios electrónicos prácticos y accesibles que ayuden a proteger, conectar y aprovechar mejor los dispositivos cotidianos.</p>
-      <p><b>Visión.</b> Convertirse en una boutique reconocida por la variedad de accesorios, la atención al cliente y una experiencia de compra sencilla.</p></div>
-    <ul class="values"><li>Honestidad</li><li>Calidad</li><li>Innovación</li><li>Responsabilidad</li><li>Atención al cliente</li></ul>
+      <p><b>Accesorios y reparaciones Valenzuela</b> · Responsable: Raúl Ramos.</p>
+      <p>Un negocio de El Salvador enfocado en accesorios electrónicos y consultas de reparación de dispositivos, con atención directa por WhatsApp.</p>
+      <p><b>Misión (propuesta).</b> Facilitar el acceso a accesorios electrónicos útiles y brindar atención para consultas de reparación de dispositivos, priorizando la claridad y el servicio al cliente.</p>
+      <p><b>Visión (propuesta).</b> Desarrollar una presencia comercial reconocible por la organización de sus productos, la atención al cliente y la facilidad para consultar servicios.</p>
+      <p class="mini">Misión, visión y valores son propuestas editables por el propietario.</p></div>
+    <ul class="values"><li>Honestidad</li><li>Responsabilidad</li><li>Atención al cliente</li><li>Innovación</li><li>Compromiso</li></ul>
   </div>
 </section>
 
-<section class="light">
-<div class="wrap sec" id="contacto">
-  <h2>Contacto y ayuda</h2>
+<section class="wrap sec" id="contacto">
+  <h2>Contacto directo</h2>
   <div class="contact">
-    <form id="form" novalidate>
-      <label>Nombre<input name="nombre" autocomplete="name"><small class="err" data-for="nombre"></small></label>
-      <label>Correo<input name="correo" type="email" autocomplete="email"><small class="err" data-for="correo"></small></label>
-      <label>Consulta<textarea name="consulta" rows="4"></textarea><small class="err" data-for="consulta"></small></label>
-      <button class="btn pri" type="submit">Enviar consulta</button>
-      <p class="ok" id="formOk" role="status"></p>
-      <p class="note">Contacto demostrativo: no se muestran dirección ni teléfono reales.</p>
-    </form>
+    <div class="cbox">
+      <p><b>Accesorios y reparaciones Valenzuela</b></p>
+      <p>Responsable: Raúl Ramos</p>
+      <p>Teléfono: <a href="tel:+50378189762">7818-9762</a></p>
+      <div class="actions"><a class="btn pri" href="tel:+50378189762">Llamar</a>
+        <a class="btn wa" data-wa href="https://wa.me/50378189762" target="_blank" rel="noopener">Contactar por WhatsApp</a></div>
+      <p class="note">Si WhatsApp no abre, puedes llamar al mismo número.</p>
+    </div>
     <div class="faq">
-      <details><summary>¿Cómo elijo un cable o cargador?</summary><p>Revisa el tipo de conector de tu dispositivo (USB-C, Micro-USB) y la potencia que indica su fabricante. Un cargador de mayor potencia suele ser seguro si el dispositivo regula lo que recibe, pero confirma en el manual.</p></details>
-      <details><summary>¿Cómo compruebo si una funda o protector me sirve?</summary><p>Busca el modelo exacto en la parte trasera o en Ajustes. Compara su nombre con la lista de modelos del producto antes de comprar.</p></details>
-      <details><summary>¿Esta tienda vende de verdad?</summary><p>No. Es un prototipo académico: no procesa pagos ni envía pedidos.</p></details>
-      <details><summary>¿Los datos de compatibilidad son confiables?</summary><p>Son de demostración. En un negocio real se validarían con la ficha del proveedor.</p></details>
+      <details><summary>¿Cómo hago un pedido?</summary><p>Agrega productos al carrito, pulsa «Hacer pedido por WhatsApp» y envía el mensaje que se abre. El negocio confirmará disponibilidad y precio final.</p></details>
+      <details><summary>¿Puedo pagar en la web?</summary><p>No. La web no procesa pagos ni confirma pedidos; las condiciones se acuerdan directamente con el negocio.</p></details>
+      <details><summary>¿Cómo consulto una reparación?</summary><p>Completa el formulario de «Servicios de reparación» y envía el mensaje por WhatsApp. El negocio responderá si puede revisar tu dispositivo.</p></details>
+      <details><summary>¿Los precios son definitivos?</summary><p>El total del carrito es una estimación sujeta a confirmación del negocio.</p></details>
+      <details><summary>¿Cómo compruebo que un accesorio sirve para mi equipo?</summary><p>Revisa el modelo exacto de tu dispositivo y el tipo de conector, y pide confirmación al negocio antes de comprar.</p></details>
     </div>
   </div>
-</div>
 </section>
 </main>
 
-<footer><div class="wrap">NEXORA ACCESS · Prototipo académico · Pequeños accesorios. Grandes conexiones. · <a href="admin.html">Administrar</a></div></footer>
+<footer><div class="wrap">Accesorios y reparaciones Valenzuela · El Salvador · <a href="admin.html">Administrar</a></div></footer>
 
 <div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" aria-label="Carrito de compras" aria-hidden="true">
-  <div class="drawer-head"><h2>Tu carrito</h2><button class="icon" data-act="close-cart" aria-label="Cerrar carrito">✕</button></div>
+  <div class="drawer-head"><h2>Tu pedido</h2><button class="icon" data-act="close-cart" aria-label="Cerrar carrito">✕</button></div>
   <div id="cartItems"></div>
   <div class="drawer-foot">
-    <p class="total">Total <b id="cartTotal">$0.00</b></p>
-    <button class="btn pri" data-act="summary" id="toSummary">Continuar al resumen</button>
+    <p class="total">Total estimado <b id="cartTotal">$0.00</b></p>
+    <p class="mini">Sujeto a confirmación del negocio. No incluye envío ni otros cargos.</p>
+    <label class="cm">Comentarios para el negocio (opcional)<textarea id="orderNote" rows="2"></textarea></label>
+    <button class="btn wa" data-act="order">Hacer pedido por WhatsApp</button>
+    <p class="err" id="orderMsg" role="alert"></p>
+    <p class="mini">Abrir WhatsApp no envía el pedido: debes enviar el mensaje y esperar la confirmación.</p>
+    <button class="btn ghost dark" data-act="close-cart">Seguir comprando</button>
     <button class="btn ghost dark" data-act="clear">Vaciar carrito</button>
   </div>
 </aside>

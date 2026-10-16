@@ -1,71 +1,75 @@
-# NEXORA ACCESS
+# Accesorios y reparaciones Valenzuela
 
-**Pequeños accesorios. Grandes conexiones.**
+Página web comercial para el negocio **Accesorios y reparaciones Valenzuela** (El Salvador). Responsable: Raúl Ramos. Teléfono y WhatsApp: 7818-9762 (+503). Moneda: USD.
 
-## 1. Nombre y descripción
-Prototipo funcional de una boutique en línea de accesorios electrónicos pequeños (cables, fundas, cargadores, baterías, protectores, adaptadores y soportes), pensada como un negocio que podría abrir en El Salvador. Productos, precios y compatibilidades son datos de demostración.
+Los pedidos y las consultas de reparación **se preparan en la web y los envía manualmente el cliente por WhatsApp**. La web no procesa pagos, no confirma pedidos y no tiene base de datos compartida.
 
-## 2. Problema identificado
-Es difícil encontrar accesorios organizados por tipo, precio y compatibilidad.
+## 1. Problema que resuelve
+Los clientes no encuentran fácilmente accesorios organizados por categoría y precio, ni una forma clara de consultar reparaciones.
 
-## 3. Justificación
-Comprar un accesorio incorrecto genera gastos y devoluciones. Una tienda que ordene el catálogo y avise cuando la compatibilidad no está confirmada ahorra tiempo y dinero.
+## 2. Objetivos
+- Mostrar un catálogo ordenado con búsqueda, filtros y favoritos.
+- Permitir armar un pedido en un carrito y enviarlo por WhatsApp.
+- Permitir consultar reparaciones con un formulario validado.
 
-## 4. Objetivos
-- General: crear un prototipo de tienda de accesorios fácil de usar.
-- Específicos: filtrar por categoría, precio y compatibilidad; ofrecer carrito persistente; validar el contacto; funcionar en celular, tableta y computadora.
+## 3. Público objetivo
+Personas de El Salvador que usan teléfonos y otros dispositivos y buscan accesorios o reparaciones.
 
-## 5. Público objetivo
-Jóvenes y adultos que usan teléfonos celulares a diario y buscan accesorios accesibles.
+## 4. Funcionalidades
+- Menú móvil, búsqueda, 9 categorías, filtros por categoría y precio, orden por precio o nombre.
+- Variantes, detalles, favoritos con sección propia, y carrito con cantidades, subtotales y total estimado (guardado en localStorage).
+- «Hacer pedido por WhatsApp»: mensaje generado con los productos del carrito y codificado con `encodeURIComponent()`. No abre WhatsApp si el carrito está vacío.
+- Servicios de reparación (pendientes de confirmación) con consulta por WhatsApp y formulario con validación y resumen previo.
+- «Encuentra tu accesorio», «Tu celular, tu estilo» y paquetes de demostración.
+- Panel del dueño (`admin.html`): agregar, editar, ocultar y eliminar productos, imagen y disponibilidad.
 
-## 6. Solución propuesta
-Un catálogo con buscador, filtros, la herramienta «Encuentra tu accesorio», la sección «Tu celular, tu estilo», ofertas en paquete y atención al cliente.
+## 5. Tecnologías
+HTML5, CSS3 (Grid y Flexbox), JavaScript puro, localStorage y enlaces `wa.me`.
 
-## 7. Tecnologías utilizadas
-HTML5 semántico, CSS3 (Grid y Flexbox), JavaScript puro y localStorage. Sin dependencias.
-
-## 8. Funcionalidades implementadas
-- Menú móvil, búsqueda por nombre, filtros por categoría y precio, orden por precio.
-- Variantes por producto, detalles, favoritos y carrito (cantidades, subtotales, total, resumen) guardados en localStorage.
-- «Encuentra tu accesorio»: filtra con reglas y datos registrados (no usa inteligencia artificial) y avisa si la compatibilidad no está confirmada.
-- «Tu celular, tu estilo»: fundas por color, estilo, modelo y precio, con vista previa.
-- Panel del dueño (`admin.html`, contraseña de demostración `nexora2026`): agregar, editar, ocultar y eliminar productos.
-- Paquetes de oferta, preguntas frecuentes y formulario con validación.
-
-## 9. Estructura de archivos
+## 6. Estructura
 ```
-NEXORA-ACCESS/
+ACCESORIOS-VALENZUELA/
 ├── index.html
 ├── admin.html
 ├── css/styles.css
-├── js/data.js
-├── js/app.js
-├── js/admin.js
-├── assets/images/
+├── js/data.js      (negocio, categorías, productos, servicios)
+├── js/app.js       (tienda, carrito, WhatsApp)
+├── js/admin.js     (panel del dueño)
+├── assets/images/  (fotos de productos)
 ├── assets/icons/
 └── README.md
 ```
 
-## 10. Instrucciones para ejecutar
-Abre `index.html` en un navegador moderno. No requiere servidor ni instalación.
+## 7. Cómo ejecutarlo
+Abre `index.html` en un navegador. No necesita instalación.
+
+## 8. Publicar en GitHub Pages
+1. Sube el contenido de la carpeta a un repositorio.
+2. En *Settings → Pages*, elige la rama principal y la carpeta raíz.
+3. Abre la dirección que GitHub indique y prueba los enlaces de WhatsApp.
+Todas las rutas son relativas.
+
+## 9. Configurar WhatsApp y datos del negocio
+En `js/data.js`, el objeto `BUSINESS` guarda el nombre, el responsable y el número internacional (`50378189762`). Los enlaces tienen la forma `https://wa.me/50378189762?text=...`. En `index.html`, el enlace de llamada es `tel:+50378189762`.
+
+## 10. Agregar productos reales
+- Con el panel `admin.html`, o editando `DEFAULTS` en `js/data.js`.
+- Copia las fotos a `assets/images/` y escribe su ruta (por ejemplo `assets/images/cable.jpg`).
+- Los productos creados en el panel dejan de mostrar la etiqueta «Demostración».
 
 ## 11. Pruebas realizadas
-Se probó con un entorno simulado (jsdom): renderizado del catálogo, categorías, agregar productos y paquetes, cambio de cantidades, totales, resumen, filtros, vista previa de fundas y validación del formulario, sin errores de JavaScript. Pendiente: revisión manual en navegador real y en celular.
+Probadas en un entorno simulado (jsdom), sin errores de JavaScript: catálogo, categorías, favoritos, carrito (cantidades, totales, persistencia), mensaje de pedido, carrito vacío sin pedido, validación y mensaje de reparación, mensaje por servicio, y panel del dueño con sus cambios reflejados en la tienda.
 
-## 12. Limitaciones y mejoras futuras
-- Las imágenes son ilustraciones SVG; coloca fotografías reales en `assets/images/` y úsalas en lugar de `art()` en `js/app.js`.
-- Datos de compatibilidad, precios y existencias de demostración.
-- El panel guarda los cambios solo en el navegador donde se usa y su contraseña no es segura; un negocio real necesita servidor y base de datos.
-- No procesa pagos ni envía pedidos.
-- Futuro: base de datos, inventario real, pasarela de pago y cuentas de usuario.
+**Pendiente de comprobar manualmente:** que WhatsApp abra con el número 7818-9762 y que esa cuenta esté activa; el aspecto en teléfonos reales (Android e iPhone) y tabletas; las imágenes reales; el enlace de llamada.
 
----
+## 12. Limitaciones
+- Datos, precios, imágenes y compatibilidades son de demostración hasta que el dueño registre los reales.
+- Los servicios de reparación están pendientes de confirmación; no hay precios ni tiempos.
+- El panel y los favoritos usan localStorage: los cambios solo existen en ese navegador y no se sincronizan.
+- El panel tiene un acceso básico cuya clave está en `js/admin.js`; **no es seguridad real** y no protege información.
+- GitHub Pages es estático: no hay base de datos ni administración compartida.
+- No hay pagos, envíos ni confirmación automática de pedidos.
+- Los servicios de reparación no se editan desde el panel (se cambian en `js/data.js`).
 
-## Propuesta de presentación (7 diapositivas)
-1. **Portada:** NEXORA ACCESS y su eslogan.
-2. **Problema y oportunidad:** accesorios difíciles de comparar por tipo, precio y compatibilidad.
-3. **Objetivos y público objetivo.**
-4. **Diseño e identidad visual:** azul noche, cian eléctrico y catálogo claro.
-5. **Funcionalidades principales:** filtros, «Encuentra tu accesorio», estilo de fundas y carrito.
-6. **Demostración en vivo:** buscar un cable USB-C de hasta $6, agregarlo y ver el resumen.
-7. **Conclusiones y evolución hacia un negocio real.**
+## 13. Mejoras futuras
+Base de datos con ingreso real para el dueño, fotos reales, administración de servicios y promociones, registro de existencias y datos confirmados de horarios y ubicación.

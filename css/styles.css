@@ -139,3 +139,50 @@ label.chk{flex-direction:row;align-items:center;gap:6px}
 .tbl th,.tbl td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
 .acts{white-space:nowrap}.acts .link{color:#1b4fd8;margin-right:10px}
 .admin .lead{margin:0;color:var(--gray)}
+
+/*--------*/
+.logo{gap:10px}.mark{width:34px;height:34px}
+.logo span{display:flex;flex-direction:column;line-height:1.05}
+.logo small{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)}
+.logo b{font-size:1.35rem;color:var(--white);font-family:Georgia,serif;letter-spacing:.01em}
+.btn.wa{background:var(--ok);color:var(--night)}.btn.wa:hover{background:#8ff0bf}
+.hero .btn.ghost{color:var(--white)}
+.mini{font-size:.8rem;color:#5a6b85;margin:6px 0}
+.hero .mini,.dark-sec .mini{color:var(--gray)}
+.demo-note{background:#fff5d6;color:#5d4200;border-radius:8px;padding:8px 12px;font-size:.9rem;margin:0 0 20px}
+.sub{margin-top:48px}
+
+/*--------*/
+.cats{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:18px 12px}
+.cat{background:none;border:0;color:var(--ink);text-align:center;padding:0}
+.cat .circ{display:block;width:112px;height:112px;margin:0 auto 8px;border-radius:50%;overflow:hidden;border:2px solid transparent}
+.cat:hover .circ,.cat:focus-visible .circ{border-color:var(--cyan)}
+.cat .circ svg{width:100%;height:100%;margin:0;border-radius:0}
+.cat .nm{display:block;font-weight:700;font-size:.92rem}.cat small{color:#5a6b85}
+
+/*--------*/
+.card{position:relative}
+.badge{position:absolute;top:8px;left:8px;background:#fff5d6;color:#5d4200;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;z-index:1}
+.card img{width:100%;aspect-ratio:220/150;object-fit:cover;display:block}
+.stock{font-size:.85rem;color:#0b7a46;font-weight:700}
+.row{flex-wrap:wrap}.row .btn{min-height:44px}
+.services{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.svc{border:1px solid var(--line);border-left:4px solid var(--cyan);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:8px}
+.svc h3{margin:0;font-size:1.05rem}.svc p{margin:0;font-size:.9rem;color:#42536d}.svc .btn{margin-top:auto}
+.pend{align-self:flex-start;background:#fff5d6;color:#5d4200;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px}
+.rpreview{border:1px solid var(--line);border-radius:var(--r);padding:16px;background:#f7f9fc;display:flex;flex-direction:column;gap:10px;align-self:start}
+.rpreview pre{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:.9rem;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;margin:0}
+.cbox{display:flex;flex-direction:column;gap:6px}.cbox p{margin:0}
+
+/*--------*/
+.line{grid-template-columns:56px 1fr auto;align-items:start}
+.line>div:nth-child(2){display:flex;flex-direction:column}
+.thumb img,.thumb svg{width:56px;height:40px;object-fit:cover;border-radius:6px;display:block}
+.line .qty,.line .link{grid-column:2/-1}
+.line .link{justify-self:start}
+.drawer-foot{max-height:58vh;overflow:auto}
+.cm{display:flex;flex-direction:column;font-size:.85rem;gap:4px}
+.cm textarea{min-width:0;width:100%}
+.drawer .btn{text-align:center;min-height:44px}
+.qty button{width:36px;height:36px}
+@media(max-width:860px){.cart-btn{padding:8px 12px}.bar{gap:10px}}

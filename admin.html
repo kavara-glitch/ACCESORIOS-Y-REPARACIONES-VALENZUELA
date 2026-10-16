@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Panel del dueño | NEXORA ACCESS</title>
+<title>Panel del dueño | Accesorios y reparaciones Valenzuela</title>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="admin">
 <header class="top"><div class="wrap bar">
-  <a class="logo" href="index.html"><span class="dot"></span>NEXORA <b>ACCESS</b></a>
+  <a class="logo" href="index.html"><span><small>Accesorios y reparaciones</small><b>Valenzuela</b></span></a>
   <span class="lead">Panel del dueño</span>
   <a class="btn ghost" href="index.html" style="margin-left:auto">Ver tienda</a>
   <button class="btn ghost" id="logout" hidden>Salir</button>
@@ -22,7 +22,7 @@
     <button class="btn pri" type="submit">Entrar</button>
   </form>
   <p class="err" id="loginErr"></p>
-  <p class="note">Contraseña de demostración: nexora2026. Es solo un prototipo, no ofrece seguridad real.</p>
+  <p class="note">Acceso básico sin seguridad real: no protege la información. Los cambios solo se guardan en este navegador.</p>
 </section>
 
 <section id="panel" hidden>
@@ -36,6 +36,8 @@
     <label>Estilo (fundas)<select name="style"><option>minimalista</option><option>elegante</option><option>transparente</option><option>juvenil</option></select></label>
     <label class="wide">Colores (fundas)<span class="checks" id="fcols"></span></label>
     <label class="wide">Modelos compatibles (fundas y protectores; vacío = sin confirmar)<span class="checks" id="fmodels"></span></label>
+    <label>Imagen (ruta en assets/images/, opcional)<input name="img" placeholder="assets/images/cable.jpg"></label>
+    <label>Disponibilidad<select name="stock"><option value="">Sin registrar</option><option>Disponible</option><option>Agotado</option></select></label>
     <label class="chk"><input type="checkbox" name="off"> Ocultar de la tienda</label>
     <div class="actions"><button class="btn pri" type="submit">Guardar producto</button><button class="btn ghost dark" type="button" id="cancel">Cancelar</button></div>
     <p class="err" id="perr" role="alert"></p>
