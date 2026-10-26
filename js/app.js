@@ -38,10 +38,11 @@ function card(p, opts = {}) {
   const sels = (p.opts || []).map(([l, v]) =>
     `<label class="sr">${l}<select data-opt="${l}">${v.map(o => `<option>${o}</option>`).join('')}</select></label>`).join('');
   const warn = !p.models && (opts.model || opts.warn) ? '<div class="warn">Compatibilidad sin confirmar: verifica las especificaciones.</div>' : '';
+  const modelo = p.modelo ? `<div class="modelo">Modelo: ${p.modelo}</div>` : '';
   const stock = p.stock ? `<div class="stock">Disponibilidad: ${p.stock}</div>` : '';
   return `<article class="card ${opts.sel === p.id ? 'sel' : ''}" data-id="${p.id}">
     ${p.real ? '' : '<span class="badge">Demostración</span>'}${img(p)}
-    <div class="body"><h3>${p.n}</h3><div class="price">${money(p.p)}</div><p>${p.d}</p>${stock}${sels}${warn}
+    <div class="body"><h3>${p.n}</h3><div class="price">${money(p.p)}</div><p>${p.d}</p>${modelo}${stock}${sels}${warn}
     <div class="row"><button class="btn pri" data-act="add" data-id="${p.id}">Agregar al carrito</button>
     <button class="btn ghost" data-act="det" data-id="${p.id}">Ver detalles</button>
     <button class="btn ghost fav" data-act="fav" data-id="${p.id}" aria-pressed="${favs.includes(p.id)}" aria-label="Guardar en favoritos">♥</button></div></div></article>`;
@@ -50,7 +51,7 @@ const empty = msg => `<div class="empty">${msg}</div>`;
 
 function renderCatalog() {
   const list = PRODUCTS.filter(p =>
-    (!F.cat || p.c === F.cat) && p.p <= F.max && p.n.toLowerCase().includes(F.q.toLowerCase()));
+    (!F.cat || p.c === F.cat) && p.p <= F.max && (p.n + ' ' + (p.modelo || '')).toLowerCase().includes(F.q.toLowerCase()));
   if (F.sort === 'name') list.sort((a, b) => a.n.localeCompare(b.n, 'es'));
   else if (F.sort) list.sort((a, b) => F.sort === 'asc' ? a.p - b.p : b.p - a.p);
   const inCat = PRODUCTS.some(p => !F.cat || p.c === F.cat);
@@ -139,7 +140,7 @@ function showDialog(html) { $('#dlgBody').innerHTML = html; $('#dlg').showModal(
 function details(p) {
   showDialog(`${img(p)}<h2>${p.n}</h2><p class="price">${money(p.p)}</p><p>${p.d}</p>
     <p><b>Categoría:</b> ${CATS[p.c]}</p>
-    ${p.conn ? `<p><b>Conexión:</b> ${p.conn}</p>` : ''}${p.spec ? `<p><b>Detalles:</b> ${p.spec}</p>` : ''}
+    ${p.modelo ? `<p><b>Modelo:</b> ${p.modelo}</p>` : ''}${p.conn ? `<p><b>Conexión:</b> ${p.conn}</p>` : ''}${p.spec ? `<p><b>Detalles:</b> ${p.spec}</p>` : ''}
     ${p.stock ? `<p><b>Disponibilidad:</b> ${p.stock}</p>` : ''}
     <p><b>Compatibilidad:</b> ${p.models ? p.models.join(', ') + (p.real ? '' : ' (demostrativo)') : 'sin confirmar'}</p>
     <p class="note">${p.real ? 'Precio y disponibilidad sujetos a confirmación del negocio.' : 'Datos de demostración: el negocio debe confirmar precio, compatibilidad y disponibilidad.'}</p>`);
@@ -175,7 +176,7 @@ document.addEventListener('click', e => {
   const item = () => cart.find(i => i.key === key);
   if (act === 'add') {
     const p = byId(id), c = b.closest('.card');
-    const o = $$('select[data-opt]', c).map(s => `${s.dataset.opt}: ${s.value}`).join(' · ');
+    const o = [...(p.modelo ? ['Modelo: ' + p.modelo] : []), ...$$('select[data-opt]', c).map(s => `${s.dataset.opt}: ${s.value}`)].join(' · ');
     addToCart(id + '|' + o, p.n, p.p, o);
   } else if (act === 'bundle') {
     const bd = BUNDLES.find(x => x.id === id); addToCart(bd.id, bd.n, bd.price, 'Paquete');

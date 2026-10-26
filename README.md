@@ -21,7 +21,8 @@ Personas de El Salvador que usan teléfonos y otros dispositivos y buscan acceso
 - «Hacer pedido por WhatsApp»: mensaje generado con los productos del carrito y codificado con `encodeURIComponent()`. No abre WhatsApp si el carrito está vacío.
 - Servicios de reparación (pendientes de confirmación) con consulta por WhatsApp y formulario con validación y resumen previo.
 - «Encuentra tu accesorio», «Tu celular, tu estilo» y paquetes de demostración.
-- Panel del dueño (`admin.html`): agregar, editar, ocultar y eliminar productos, imagen y disponibilidad.
+- Inicio de sesión del administrador (`admin.html`) con cuenta incluida y cambio de contraseña.
+- Panel del dueño: agregar, editar, ocultar y eliminar productos con imagen (se sube desde el dispositivo), precio, categoría, modelo o referencia (cables, cargadores, baterías, etc.), modelos compatibles (fundas y protectores), conexión y disponibilidad.
 
 ## 5. Tecnologías
 HTML5, CSS3 (Grid y Flexbox), JavaScript puro, localStorage y enlaces `wa.me`.
@@ -54,7 +55,8 @@ En `js/data.js`, el objeto `BUSINESS` guarda el nombre, el responsable y el núm
 
 ## 10. Agregar productos reales
 - Con el panel `admin.html`, o editando `DEFAULTS` en `js/data.js`.
-- Copia las fotos a `assets/images/` y escribe su ruta (por ejemplo `assets/images/cable.jpg`).
+- Inicia sesión en `admin.html` (usuario `admin`; la contraseña inicial está en `js/admin.js`) y sube la foto desde el formulario. La imagen se reduce y se guarda en el navegador.
+- Para fotos fijas en el sitio, copia los archivos a `assets/images/` y usa su ruta en el campo `img` de `js/data.js`.
 - Los productos creados en el panel dejan de mostrar la etiqueta «Demostración».
 
 ## 11. Pruebas realizadas
@@ -66,7 +68,8 @@ Probadas en un entorno simulado (jsdom), sin errores de JavaScript: catálogo, c
 - Datos, precios, imágenes y compatibilidades son de demostración hasta que el dueño registre los reales.
 - Los servicios de reparación están pendientes de confirmación; no hay precios ni tiempos.
 - El panel y los favoritos usan localStorage: los cambios solo existen en ese navegador y no se sincronizan.
-- El panel tiene un acceso básico cuya clave está en `js/admin.js`; **no es seguridad real** y no protege información.
+- El inicio de sesión es solo un acceso básico: usuario y clave están en `js/admin.js` y la contraseña cambiada se guarda en el navegador. **No es seguridad real** y no protege información.
+- Las imágenes subidas se guardan en el navegador (espacio limitado, unos 5 MB en total).
 - GitHub Pages es estático: no hay base de datos ni administración compartida.
 - No hay pagos, envíos ni confirmación automática de pedidos.
 - Los servicios de reparación no se editan desde el panel (se cambian en `js/data.js`).
