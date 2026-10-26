@@ -1,73 +1,180 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Panel del dueño | Accesorios y reparaciones Valenzuela</title>
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel del dueño | Accesorios y reparaciones Valenzuela</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="admin">
-<header class="top"><div class="wrap bar">
-  <a class="logo" href="index.html"><span><small>Accesorios y reparaciones</small><b>Valenzuela</b></span></a>
-  <span class="lead">Panel del dueño</span>
-  <a class="btn ghost" href="index.html" style="margin-left:auto">Ver tienda</a>
-  <button class="btn ghost" id="logout" hidden>Cerrar sesión</button>
-</div></header>
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html">
+      <span><small>Accesorios y reparaciones</small><b>Valenzuela</b></span>
+    </a>
+    <span class="lead">Panel del dueño</span>
+    <a class="btn ghost" href="index.html" style="margin-left:auto">Ver tienda</a>
+    <button class="btn ghost" id="logout" hidden>Cerrar sesión</button>
+  </div>
+</header>
 
 <main class="wrap sec">
 <section id="gate">
   <form class="login-card" id="login" novalidate>
     <h2>Iniciar sesión</h2>
     <p class="note">Cuenta de administrador del negocio.</p>
-    <label>Usuario<input id="user" autocomplete="username"></label>
-    <label>Contraseña<input type="password" id="pass" autocomplete="current-password"></label>
-    <label class="chk"><input type="checkbox" id="showPass"> Mostrar contraseña</label>
+
+    <label>Correo electrónico
+      <input id="user" type="email" autocomplete="username" required>
+    </label>
+
+    <label>Contraseña
+      <input type="password" id="pass" autocomplete="current-password">
+    </label>
+
+    <label class="chk">
+      <input type="checkbox" id="showPass"> Mostrar contraseña
+    </label>
+
     <button class="btn pri" type="submit">Entrar</button>
     <p class="err" id="loginErr" role="alert"></p>
-    <p class="mini">Acceso básico sin seguridad real: no protege la información. Los cambios solo se guardan en este navegador.</p>
+    <p class="mini">Acceso exclusivo para el administrador autorizado del negocio.</p>
   </form>
 </section>
 
 <section id="panel" hidden>
   <p class="note">Sesión iniciada como <b id="who"></b></p>
+
   <h2 id="formTitle">Agregar producto</h2>
+
   <form id="pform" class="pform" novalidate>
-    <label>Nombre<input name="n"></label>
-    <label>Precio ($)<input name="p" type="number" min="0.01" step="0.01"></label>
-    <label>Categoría<select name="c" id="fc"></select></label>
-    <label data-show="cables,cargadores,baterias,reemplazo,audifonos,soportes,extras">Modelo o referencia<input name="modelo" placeholder="Ej.: modelo del cable, cargador o batería"></label>
-    <label>Conexión<select name="conn"><option value="">No aplica</option><option>USB-C</option><option>Micro-USB</option></select></label>
-    <label>Disponibilidad<select name="stock"><option value="">Sin registrar</option><option>Disponible</option><option>Agotado</option></select></label>
-    <label class="wide">Descripción<input name="d"></label>
-    <label data-show="fundas">Estilo<select name="style"><option>minimalista</option><option>elegante</option><option>transparente</option><option>juvenil</option></select></label>
-    <label class="wide" data-show="fundas">Colores<span class="checks" id="fcols"></span></label>
-    <label class="wide" data-show="fundas,protectores">Modelos compatibles (vacío = sin confirmar)<span class="checks" id="fmodels"></span></label>
+    <label>Nombre
+      <input name="n">
+    </label>
+
+    <label>Precio ($)
+      <input name="p" type="number" min="0.01" step="0.01">
+    </label>
+
+    <label>Categoría
+      <select name="c" id="fc"></select>
+    </label>
+
+    <label data-show="cables,cargadores,baterias,reemplazo,audifonos,soportes,extras">
+      Modelo o referencia
+      <input name="modelo" placeholder="Ej.: modelo del cable, cargador o batería">
+    </label>
+
+    <label>Conexión
+      <select name="conn">
+        <option value="">No aplica</option>
+        <option>USB-C</option>
+        <option>Micro-USB</option>
+      </select>
+    </label>
+
+    <label>Disponibilidad
+      <select name="stock">
+        <option value="">Sin registrar</option>
+        <option>Disponible</option>
+        <option>Agotado</option>
+      </select>
+    </label>
+
+    <label class="wide">Descripción
+      <input name="d">
+    </label>
+
+    <label data-show="fundas">Estilo
+      <select name="style">
+        <option>minimalista</option>
+        <option>elegante</option>
+        <option>transparente</option>
+        <option>juvenil</option>
+      </select>
+    </label>
+
+    <label class="wide" data-show="fundas">Colores
+      <span class="checks" id="fcols"></span>
+    </label>
+
+    <label class="wide" data-show="fundas,protectores">
+      Modelos compatibles (vacío = sin confirmar)
+      <span class="checks" id="fmodels"></span>
+    </label>
+
     <div class="wide imgbox">
-      <label>Imagen del producto<input type="file" id="file" accept="image/*"></label>
+      <label>Imagen del producto
+        <input type="file" id="file" accept="image/*">
+      </label>
       <div class="imgprev" id="imgPrev">Sin imagen</div>
       <button class="btn ghost dark" type="button" id="noImg">Quitar imagen</button>
     </div>
-    <label class="chk"><input type="checkbox" name="off"> Ocultar de la tienda</label>
-    <div class="actions"><button class="btn pri" type="submit">Guardar producto</button><button class="btn ghost dark" type="button" id="cancel">Cancelar</button></div>
+
+    <label class="chk">
+      <input type="checkbox" name="off"> Ocultar de la tienda
+    </label>
+
+    <div class="actions">
+      <button class="btn pri" type="submit">Guardar producto</button>
+      <button class="btn ghost dark" type="button" id="cancel">Cancelar</button>
+    </div>
+
     <p class="err" id="perr" role="alert"></p>
   </form>
 
   <h2>Productos</h2>
-  <div class="tbl"><table><thead><tr><th>Imagen</th><th>Producto</th><th>Modelo</th><th>Categoría</th><th>Precio</th><th>Estado</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
-  <p class="note">Los cambios se guardan en este navegador. Para que otros clientes los vean se necesita un servidor.</p>
+
+  <div class="tbl">
+    <table>
+      <thead>
+        <tr>
+          <th>Imagen</th>
+          <th>Producto</th>
+          <th>Modelo</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <p class="note">Los productos se administran mediante la base de datos del negocio.</p>
+
   <button class="btn ghost dark" id="reset">Restaurar productos de ejemplo</button>
 
-  <details class="pw"><summary>Cambiar contraseña</summary>
+  <details class="pw">
+    <summary>Cambiar contraseña</summary>
+
     <form id="pwForm" class="pform" novalidate>
-      <label>Contraseña actual<input type="password" name="cur" autocomplete="current-password"></label>
-      <label>Nueva contraseña (mínimo 6)<input type="password" name="nw" autocomplete="new-password"></label>
-      <label>Repetir nueva contraseña<input type="password" name="nw2" autocomplete="new-password"></label>
-      <div class="actions"><button class="btn pri" type="submit">Guardar contraseña</button></div>
+      <label>Contraseña actual
+        <input type="password" name="cur" autocomplete="current-password">
+      </label>
+
+      <label>Nueva contraseña (mínimo 6)
+        <input type="password" name="nw" autocomplete="new-password">
+      </label>
+
+      <label>Repetir nueva contraseña
+        <input type="password" name="nw2" autocomplete="new-password">
+      </label>
+
+      <div class="actions">
+        <button class="btn pri" type="submit">Guardar contraseña</button>
+      </div>
+
       <p class="err" id="pwMsg" role="alert"></p>
     </form>
   </details>
 </section>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
 <script src="js/data.js"></script>
 <script src="js/admin.js"></script>
 </body>
