@@ -5,41 +5,63 @@ const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; 
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 
 //--------
-const CATS = {
-  cables: 'Cables y conexiones', fundas: 'Fundas para celulares', cargadores: 'Cargadores y adaptadores',
-  baterias: 'Baterías externas', reemplazo: 'Baterías de reemplazo compatibles', protectores: 'Protectores de pantalla',
-  soportes: 'Soportes para celulares', audifonos: 'Audífonos', extras: 'Accesorios adicionales'
-};
-const MODELS = ['Galaxy A15', 'Redmi 13', 'iPhone 13', 'Moto G54'];
+const DEFAULT_CATS = [
+  { id: 'cables', name: 'Cables y conexiones' },
+  { id: 'fundas', name: 'Fundas para celulares' },
+  { id: 'cargadores', name: 'Cargadores y adaptadores' },
+  { id: 'baterias', name: 'Baterías externas' },
+  { id: 'reemplazo', name: 'Baterías de reemplazo compatibles' },
+  { id: 'protectores', name: 'Protectores de pantalla' },
+  { id: 'audifonos', name: 'Audífonos' },
+  { id: 'soportes', name: 'Soportes para celulares' },
+  { id: 'extras', name: 'Accesorios adicionales' }
+];
+const CATS = {};
+const setCategories = list => { Object.keys(CATS).forEach(k => delete CATS[k]); list.forEach(c => CATS[c.id] = c.name); };
+const catList = () => Object.entries(CATS).map(([id, name]) => ({ id, name }));
+const validCats = a => Array.isArray(a) && a.every(c => c && /^[a-z0-9-]{1,40}$/.test(c.id) && typeof c.name === 'string' && c.name.trim().length >= 2 && c.name.length <= 40);
+
 const COLORS = { Negro: '#1b1f2a', Azul: '#2b5cff', Verde: '#2fbf8a', Transparente: '#dfe8f3', Rosa: '#ff7ab8', Blanco: '#f4f7fb' };
 
 //--------
-const DEFAULTS = [
-  { id: 'p1', n: 'Cable FlexCharge USB-C', p: 4.99, c: 'cables', conn: 'USB-C', d: 'Cable para cargar y transferir datos en dispositivos compatibles.', opts: [['Longitud', ['1 m', '2 m', '3 m']]] },
-  { id: 'p2', n: 'Funda UrbanShield', p: 6.5, c: 'fundas', style: 'juvenil', cols: ['Negro', 'Azul', 'Verde'], models: MODELS, d: 'Funda protectora de diseño moderno.' },
-  { id: 'p3', n: 'Cargador Nexa 20W', p: 8.99, c: 'cargadores', conn: 'USB-C', d: 'Adaptador de corriente para dispositivos compatibles.', spec: 'Potencia: 20 W. Estándares: dato demostrativo, verificar con la ficha del proveedor.' },
-  { id: 'p4', n: 'GlassGuard HD', p: 3.99, c: 'protectores', models: MODELS, d: 'Protector de vidrio templado para modelos compatibles.', opts: [['Modelo', MODELS]] },
-  { id: 'p5', n: 'PowerGo 10K', p: 17.99, c: 'baterias', conn: 'USB-C', d: 'Batería portátil conceptual de 10,000 mAh para dispositivos compatibles.' },
-  { id: 'p6', n: 'Adaptador LinkPro', p: 3.5, c: 'cargadores', conn: 'USB-C', d: 'Adaptador para conexiones compatibles.', spec: 'Entrada: USB-A. Salida: USB-C (dato demostrativo).' },
-  { id: 'p7', n: 'Cable MicroFlex', p: 3.5, c: 'cables', conn: 'Micro-USB', d: 'Cable micro-USB para dispositivos compatibles.' },
-  { id: 'p8', n: 'StandPocket', p: 4.5, c: 'soportes', d: 'Soporte compacto y ajustable para teléfonos celulares.' },
-  { id: 'p9', n: 'Funda ClearView', p: 5.25, c: 'fundas', style: 'transparente', cols: ['Transparente'], models: MODELS, d: 'Funda transparente que deja ver el color del teléfono.' },
-  { id: 'p10', n: 'Funda SoftMini', p: 5.99, c: 'fundas', style: 'minimalista', cols: ['Negro', 'Blanco'], models: ['Galaxy A15', 'Redmi 13', 'Moto G54'], d: 'Funda delgada de acabado liso.' },
-  { id: 'p11', n: 'Funda Aurora Gold', p: 9.5, c: 'fundas', style: 'elegante', cols: ['Negro', 'Rosa', 'Blanco'], models: ['iPhone 13', 'Galaxy A15'], d: 'Funda de acabado elegante con bordes reforzados.' },
-  { id: 'p12', n: 'Audífonos BudLine', p: 9.9, c: 'audifonos', d: 'Audífonos con cable para uso diario.' }
-];
-DEFAULTS.forEach(p => {
-  if (p.c === 'fundas') p.opts = [['Color', p.cols], ['Modelo', p.models]];
-});
-const ALL = load('val_products', null) || DEFAULTS;
-const PRODUCTS = ALL.filter(p => !p.off);
+const ALL = [];
+let PRODUCTS = [];
 const byId = id => ALL.find(p => p.id === id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const safeImg = u => /^(data:image\/(jpeg|png|webp);base64,|https:\/\/|assets\/images\/)/.test(u || '') ? u : '';
 
-const BUNDLES = [
-  { id: 'b1', n: 'Cable USB-C + cargador', items: ['p1', 'p3'], price: 12.99, cond: 'Cable de 1 m. Verificar compatibilidad con tu dispositivo.' },
-  { id: 'b2', n: 'Funda + protector de pantalla', items: ['p2', 'p4'], price: 9.99, cond: 'Elige modelo al ver los productos individuales; paquete demostrativo.' },
-  { id: 'b3', n: 'Adaptador + cable de carga', items: ['p6', 'p1'], price: 7.99, cond: 'Sujeto a verificar tipo de conexión.' }
-];
+//--------
+const STYLES = ['minimalista', 'elegante', 'transparente', 'juvenil'];
+const strs = a => Array.isArray(a) && a.every(x => typeof x === 'string' && x.length <= 60);
+
+function normalize(p) {
+  if (!p || typeof p.id !== 'string' || typeof p.n !== 'string' || typeof p.d !== 'string') return null;
+  if (typeof p.p !== 'number' || !(p.p > 0) || p.p >= 100000 || !CATS[p.c]) return null;
+  const q = { ...p }; delete q.opts;
+  if (q.models !== undefined && !strs(q.models)) return null;
+  if (q.c === 'fundas') {
+    if (!strs(q.cols) || !q.cols.length || !q.cols.every(c => COLORS[c]) || !q.models || !q.models.length || !STYLES.includes(q.style)) return null;
+    q.opts = [['Color', q.cols], ['Modelo', q.models]];
+  } else if (q.c === 'protectores' && q.models && q.models.length) q.opts = [['Modelo', q.models]];
+  return q;
+}
+
+function setProducts(list) {
+  const a = [...list];
+  ALL.length = 0; ALL.push(...a);
+  PRODUCTS = ALL.filter(p => !p.off);
+}
+
+//--------
+let catalogMode = 'published';
+function loadCatalog() {
+  const w = load('val_catalog', null);
+  const useWork = w && typeof w.v === 'number' && w.v >= CATALOGO.v && Array.isArray(w.products);
+  const src = useWork ? w : CATALOGO;
+  setCategories(validCats(src.categories) ? src.categories : DEFAULT_CATS);
+  setProducts((src.products || []).map(normalize).filter(Boolean));
+  catalogMode = useWork && w.v > CATALOGO.v ? 'working' : 'published';
+}
 
 //--------
 const BUSINESS = { name: 'Accesorios y reparaciones Valenzuela', owner: 'Raúl Ramos', phone: '7818-9762', intl: '50378189762' };

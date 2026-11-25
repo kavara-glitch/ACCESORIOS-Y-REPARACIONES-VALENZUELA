@@ -9,6 +9,7 @@
 </head>
 <body>
 <a class="skip" href="#catalogo">Saltar al catálogo</a>
+<div class="previewbar" id="previewBar" hidden>Vista previa del administrador: hay cambios sin publicar. <a href="admin.html">Ir al panel</a></div>
 
 <header class="top">
   <div class="wrap bar">
@@ -54,7 +55,7 @@
 <section class="light">
 <div class="wrap sec" id="catalogo">
   <h2>Accesorios</h2>
-  <p class="demo-note">Productos, precios, imágenes y compatibilidades son <b>datos de demostración</b> hasta que el propietario registre los reales.</p>
+  <p class="note">Precios y disponibilidad sujetos a confirmación del negocio por WhatsApp.</p>
   <div class="filters">
     <div class="chips" id="chips" role="group" aria-label="Filtrar por categoría"></div>
     <label>Precio máximo: <output id="maxOut">$20.00</output>
@@ -62,7 +63,7 @@
     <label>Ordenar
       <select id="sort"><option value="">Destacados</option><option value="asc">Precio: menor a mayor</option><option value="desc">Precio: mayor a menor</option><option value="name">Nombre: A-Z</option></select></label>
   </div>
-  <div class="grid" id="grid" aria-live="polite"></div>
+  <div class="grid" id="grid" aria-live="polite"><div class="empty">Cargando catálogo…</div></div>
 </div>
 
 <div class="wrap sec" id="favoritos">
@@ -73,7 +74,7 @@
 
 <div class="wrap sec" id="encuentra">
   <h2>Encuentra tu accesorio</h2>
-  <p class="note">Filtra con reglas y datos registrados en el catálogo. Los datos de compatibilidad son de demostración y deben verificarse.</p>
+  <p class="note">Filtra con reglas y datos registrados en el catálogo. Verifica la compatibilidad con el negocio antes de comprar.</p>
   <form class="finder" id="finder">
     <label>Dispositivo<select name="dev"><option>Teléfono celular</option></select></label>
     <label>Modelo<select name="model" id="fModel"><option value="">Cualquiera</option></select></label>
@@ -101,8 +102,8 @@
 </section>
 
 <section class="wrap sec" id="ofertas">
-  <h2>Ofertas y paquetes</h2>
-  <p class="demo-note"><b>Demostración:</b> estos paquetes no son ofertas vigentes. El propietario debe confirmar cualquier promoción.</p>
+  <h2>Ofertas y destacados</h2>
+  <p class="note">Productos destacados por el negocio. Cualquier promoción se confirma por WhatsApp.</p>
   <div class="grid" id="bundles"></div>
 </section>
 
@@ -189,13 +190,8 @@
 
 <dialog id="dlg"><div id="dlgBody"></div><form method="dialog"><button class="btn ghost dark">Cerrar</button></form></dialog>
 <div class="toast" id="toast" role="status"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-client.js"></script>
+<script src="js/catalogo.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
-<script src="js/supabase-sync.js"></script>
 </body>
 </html>
-
-

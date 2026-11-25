@@ -18,7 +18,7 @@ function art(cat, c = '#45E7F5', w = 220, h = 150) {
     extras: `<rect x="70" y="40" width="80" height="70" rx="10" fill="${base}"/><circle cx="110" cy="75" r="16" fill="none" stroke="${c}" stroke-width="6"/>`,
     audifonos: `<path d="M58 90V74a52 52 0 0 1 104 0v16" stroke="${base}" stroke-width="8" fill="none"/><rect x="48" y="88" width="22" height="34" rx="9" fill="${c}"/><rect x="150" y="88" width="22" height="34" rx="9" fill="${c}"/>`
   };
-  return `<svg viewBox="0 0 220 150" role="img" aria-label="Ilustración de ${CATS[cat]}" width="${w}" height="${h}"><rect width="220" height="150" fill="#e9eff7"/>${s[cat]}</svg>`;
+  return `<svg viewBox="0 0 220 150" role="img" aria-label="Ilustración de ${esc(CATS[cat] || '')}" width="${w}" height="${h}"><rect width="220" height="150" fill="#e9eff7"/>${s[cat] || s.extras}</svg>`;
 }
 
 //--------
@@ -31,21 +31,22 @@ function toast(msg) {
 const cents = n => Math.round(n * 100);
 
 function img(p) {
-  return p.img ? `<img src="${p.img}" alt="${p.n}" loading="lazy">` : art(p.c, p.c === 'fundas' ? COLORS[p.cols[0]] : undefined);
+  return safeImg(p.img) ? `<img src="${esc(safeImg(p.img))}" alt="${esc(p.n)}" loading="lazy">` : art(p.c, p.c === 'fundas' ? COLORS[p.cols[0]] : undefined);
 }
 
 function card(p, opts = {}) {
   const sels = (p.opts || []).map(([l, v]) =>
-    `<label class="sr">${l}<select data-opt="${l}">${v.map(o => `<option>${o}</option>`).join('')}</select></label>`).join('');
+    `<label class="sr">${esc(l)}<select data-opt="${esc(l)}">${v.map(o => `<option>${esc(o)}</option>`).join('')}</select></label>`).join('');
   const warn = !p.models && (opts.model || opts.warn) ? '<div class="warn">Compatibilidad sin confirmar: verifica las especificaciones.</div>' : '';
-  const modelo = p.modelo ? `<div class="modelo">Modelo: ${p.modelo}</div>` : '';
-  const stock = p.stock ? `<div class="stock">Disponibilidad: ${p.stock}</div>` : '';
-  return `<article class="card ${opts.sel === p.id ? 'sel' : ''}" data-id="${p.id}">
-    ${p.real ? '' : '<span class="badge">Demostración</span>'}${img(p)}
-    <div class="body"><h3>${p.n}</h3><div class="price">${money(p.p)}</div><p>${p.d}</p>${modelo}${stock}${sels}${warn}
-    <div class="row"><button class="btn pri" data-act="add" data-id="${p.id}">Agregar al carrito</button>
-    <button class="btn ghost" data-act="det" data-id="${p.id}">Ver detalles</button>
-    <button class="btn ghost fav" data-act="fav" data-id="${p.id}" aria-pressed="${favs.includes(p.id)}" aria-label="Guardar en favoritos">♥</button></div></div></article>`;
+  const modelo = p.modelo ? `<div class="modelo">Modelo: ${esc(p.modelo)}</div>` : '';
+  const stock = p.stock ? `<div class="stock">Disponibilidad: ${esc(p.stock)}</div>` : '';
+  const id = esc(p.id);
+  return `<article class="card ${opts.sel === p.id ? 'sel' : ''}" data-id="${id}">
+    ${p.destacado ? '<span class="badge">Destacado</span>' : ''}${img(p)}
+    <div class="body"><h3>${esc(p.n)}</h3><div class="price">${money(p.p)}</div><p>${esc(p.d)}</p>${modelo}${stock}${sels}${warn}
+    <div class="row"><button class="btn pri" data-act="add" data-id="${id}">Agregar al carrito</button>
+    <button class="btn ghost" data-act="det" data-id="${id}">Ver detalles</button>
+    <button class="btn ghost fav" data-act="fav" data-id="${id}" aria-pressed="${favs.includes(p.id)}" aria-label="Guardar en favoritos">♥</button></div></div></article>`;
 }
 const empty = msg => `<div class="empty">${msg}</div>`;
 
@@ -57,7 +58,7 @@ function renderCatalog() {
   const inCat = PRODUCTS.some(p => !F.cat || p.c === F.cat);
   $('#grid').innerHTML = list.length ? list.map(p => card(p)).join('')
     : empty(inCat ? 'No hay productos con esos filtros. Prueba quitar la búsqueda o subir el precio máximo.'
-      : `Aún no hay productos registrados en esta categoría. <a href="${waLink(INFO_MSG)}" target="_blank" rel="noopener">Consúltanos por WhatsApp</a>.`);
+      : `Aún no hay productos registrados${F.cat ? ' en esta categoría' : ''}. <a href="${waLink(INFO_MSG)}" target="_blank" rel="noopener">Consúltanos por WhatsApp</a>.`);
   $$('#chips .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.cat === F.cat));
 }
 
@@ -80,34 +81,29 @@ function renderFinder(e) {
 
 function renderStyle() {
   const d = Object.fromEntries(new FormData($('#styler')));
-  const list = PRODUCTS.filter(p => p.c === 'fundas' && p.cols && p.p <= parseFloat(d.max || 99) &&
+  const list = PRODUCTS.filter(p => p.c === 'fundas' && p.p <= parseFloat(d.max || 99999) &&
     (!d.color || p.cols.includes(d.color)) && (!d.style || p.style === d.style) &&
     (!d.model || p.models.includes(d.model)));
-  $('#sGrid').innerHTML = list.length ? list.map(p => card(p, { sel: selStyle })).join('') : empty('Ninguna funda coincide. Cambia el color, estilo o modelo.');
+  $('#sGrid').innerHTML = list.length ? list.map(p => card(p, { sel: selStyle })).join('') : empty('No hay fundas que coincidan. Cambia el color, estilo o modelo.');
   const p = byId(selStyle);
   if (!p || !list.includes(p)) { $('#preview').innerHTML = '<p>Selecciona una funda para ver su vista previa, colores y modelos compatibles.</p>'; return; }
   selColor = p.cols.includes(selColor) ? selColor : p.cols[0];
-  $('#preview').innerHTML = `${art('fundas', COLORS[selColor])}<h3>${p.n}</h3><div class="price">${money(p.p)}</div>
-    <p>Estilo: ${p.style}. Color: ${selColor}</p>
-    <div class="swatches">${p.cols.map(c => `<button class="sw" data-act="swatch" data-color="${c}" style="background:${COLORS[c]}" aria-label="${c}" aria-pressed="${c === selColor}"></button>`).join('')}</div>
-    <p>Modelos: ${p.models.join(', ')}${p.real ? '' : ' (demostrativo)'}</p>`;
+  $('#preview').innerHTML = `${art('fundas', COLORS[selColor])}<h3>${esc(p.n)}</h3><div class="price">${money(p.p)}</div>
+    <p>Estilo: ${esc(p.style)}. Color: ${esc(selColor)}</p>
+    <div class="swatches">${p.cols.map(c => `<button class="sw" data-act="swatch" data-color="${esc(c)}" style="background:${COLORS[c]}" aria-label="${esc(c)}" aria-pressed="${c === selColor}"></button>`).join('')}</div>
+    <p>Modelos: ${p.models.map(esc).join(', ')}</p>`;
 }
 
-function renderBundles() {
-  $('#bundles').innerHTML = BUNDLES.map(b => {
-    const sum = b.items.reduce((t, id) => t + cents(byId(id).p), 0) / 100;
-    return `<article class="card"><span class="badge">Demostración</span><div class="body"><h3>${b.n}</h3>
-      <div class="price">${money(b.price)}<s>${money(sum)}</s></div>
-      <p>Incluye: ${b.items.map(id => byId(id).n).join(' + ')}.</p><div class="warn">${b.cond}</div>
-      <div class="row"><button class="btn pri" data-act="bundle" data-id="${b.id}">Agregar al carrito</button></div></div></article>`;
-  }).join('');
+function renderOffers() {
+  const list = PRODUCTS.filter(p => p.destacado);
+  $('#bundles').innerHTML = list.length ? list.map(p => card(p)).join('') : empty('Aún no hay ofertas ni productos destacados. Consúltanos por WhatsApp.');
 }
 
 //--------
 const idOf = i => i.key.split('|')[0];
 function priceOf(i) {
-  const src = byId(idOf(i)) || BUNDLES.find(b => b.id === idOf(i));
-  return src ? (src.p ?? src.price) : i.price;
+  const src = byId(idOf(i));
+  return src ? src.p : i.price;
 }
 function addToCart(key, name, price, opts) {
   const it = cart.find(i => i.key === key);
@@ -124,10 +120,10 @@ function renderCart() {
   $('#cartTotal').textContent = money(cartTotal());
   $('#orderMsg').textContent = '';
   $('#cartItems').innerHTML = cart.length ? cart.map(i => `<div class="line"><span class="thumb">${thumb(i)}</span>
-    <div><b>${i.name}</b>${i.opts ? `<small>${i.opts}</small>` : ''}<small>${money(priceOf(i))} c/u</small></div>
+    <div><b>${esc(i.name)}</b>${i.opts ? `<small>${esc(i.opts)}</small>` : ''}<small>${money(priceOf(i))} c/u</small></div>
     <b>${money(cents(priceOf(i)) * i.qty / 100)}</b>
-    <div class="qty"><button data-act="dec" data-key="${i.key}" aria-label="Restar">−</button><span>${i.qty}</span><button data-act="inc" data-key="${i.key}" aria-label="Sumar">+</button></div>
-    <button class="link" data-act="del" data-key="${i.key}">Eliminar producto</button></div>`).join('')
+    <div class="qty"><button data-act="dec" data-key="${esc(i.key)}" aria-label="Restar">−</button><span>${i.qty}</span><button data-act="inc" data-key="${esc(i.key)}" aria-label="Sumar">+</button></div>
+    <button class="link" data-act="del" data-key="${esc(i.key)}">Eliminar producto</button></div>`).join('')
     : `<div class="empty">Tu carrito está vacío. Explora los accesorios y agrega lo que necesites.<br><br><a class="btn pri" href="#catalogo" data-act="close-cart">Explorar accesorios</a></div>`;
 }
 function openCart(open) {
@@ -138,12 +134,12 @@ function openCart(open) {
 function showDialog(html) { $('#dlgBody').innerHTML = html; $('#dlg').showModal(); }
 
 function details(p) {
-  showDialog(`${img(p)}<h2>${p.n}</h2><p class="price">${money(p.p)}</p><p>${p.d}</p>
-    <p><b>Categoría:</b> ${CATS[p.c]}</p>
-    ${p.modelo ? `<p><b>Modelo:</b> ${p.modelo}</p>` : ''}${p.conn ? `<p><b>Conexión:</b> ${p.conn}</p>` : ''}${p.spec ? `<p><b>Detalles:</b> ${p.spec}</p>` : ''}
-    ${p.stock ? `<p><b>Disponibilidad:</b> ${p.stock}</p>` : ''}
-    <p><b>Compatibilidad:</b> ${p.models ? p.models.join(', ') + (p.real ? '' : ' (demostrativo)') : 'sin confirmar'}</p>
-    <p class="note">${p.real ? 'Precio y disponibilidad sujetos a confirmación del negocio.' : 'Datos de demostración: el negocio debe confirmar precio, compatibilidad y disponibilidad.'}</p>`);
+  showDialog(`${img(p)}<h2>${esc(p.n)}</h2><p class="price">${money(p.p)}</p><p>${esc(p.d)}</p>
+    <p><b>Categoría:</b> ${esc(CATS[p.c])}</p>
+    ${p.modelo ? `<p><b>Modelo:</b> ${esc(p.modelo)}</p>` : ''}${p.conn ? `<p><b>Conexión:</b> ${esc(p.conn)}</p>` : ''}
+    ${p.stock ? `<p><b>Disponibilidad:</b> ${esc(p.stock)}</p>` : ''}
+    <p><b>Compatibilidad:</b> ${p.models ? p.models.map(esc).join(', ') : 'sin confirmar'}</p>
+    <p class="note">Precio y disponibilidad sujetos a confirmación del negocio.</p>`);
 }
 
 //--------
@@ -178,8 +174,6 @@ document.addEventListener('click', e => {
     const p = byId(id), c = b.closest('.card');
     const o = [...(p.modelo ? ['Modelo: ' + p.modelo] : []), ...$$('select[data-opt]', c).map(s => `${s.dataset.opt}: ${s.value}`)].join(' · ');
     addToCart(id + '|' + o, p.n, p.p, o);
-  } else if (act === 'bundle') {
-    const bd = BUNDLES.find(x => x.id === id); addToCart(bd.id, bd.n, bd.price, 'Paquete');
   } else if (act === 'fav') {
     favs = favs.includes(id) ? favs.filter(f => f !== id) : [...favs, id];
     save('val_favs', favs); toast(favs.includes(id) ? 'Guardado en favoritos' : 'Quitado de favoritos');
@@ -233,19 +227,21 @@ function validateRepair(e) {
 
 //--------
 function init() {
+  $('#previewBar').hidden = catalogMode !== 'working';
   const strip = svg => svg.replace(/<svg[^>]*>|<\/svg>|<rect width="220" height="150" fill="#e9eff7"\/>/g, '');
   $('#heroArt').innerHTML = `<svg viewBox="0 0 440 300"><rect width="440" height="300" rx="14" fill="#e9eff7"/>
     <g transform="translate(10 10) scale(.9)">${strip(art('cargadores'))}</g>
     <g transform="translate(180 20) scale(1.1)">${strip(art('fundas', '#45E7F5'))}</g>
     <g transform="translate(60 150) scale(1.2)">${strip(art('cables'))}</g></svg>`;
   const count = k => PRODUCTS.filter(p => p.c === k).length;
-  $('#cats').innerHTML = Object.entries(CATS).map(([k, v]) =>
+  $('#cats').innerHTML = Object.entries(CATS).map(([k, v]) => [k, esc(v)]).map(([k, v]) =>
     `<button class="cat" data-cat="${k}"><span class="circ">${art(k)}</span><span class="nm">${v}</span><small>${count(k)} ${count(k) === 1 ? 'producto' : 'productos'}</small></button>`).join('');
-  $('#chips').innerHTML = `<button class="chip" data-cat="">Todas</button>` + Object.entries(CATS).map(([k, v]) => `<button class="chip" data-cat="${k}">${v}</button>`).join('');
-  $('#fAcc').innerHTML = Object.entries(CATS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+  $('#chips').innerHTML = `<button class="chip" data-cat="">Todas</button>` + Object.entries(CATS).map(([k, v]) => [k, esc(v)]).map(([k, v]) => `<button class="chip" data-cat="${k}">${v}</button>`).join('');
+  $('#fAcc').innerHTML = Object.entries(CATS).map(([k, v]) => [k, esc(v)]).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
   const opts = a => a.map(o => `<option>${o}</option>`).join('');
-  $('#fModel').insertAdjacentHTML('beforeend', opts(MODELS));
-  $('#sModel').insertAdjacentHTML('beforeend', opts(MODELS));
+  const models = [...new Set(PRODUCTS.flatMap(p => p.models || []))].sort();
+  $('#fModel').insertAdjacentHTML('beforeend', opts(models.map(esc)));
+  $('#sModel').insertAdjacentHTML('beforeend', opts(models.map(esc)));
   $('#sColor').insertAdjacentHTML('beforeend', opts(Object.keys(COLORS)));
   $('#rService').insertAdjacentHTML('beforeend', opts(SERVICES.map(s => s.n)));
   $('#services').innerHTML = SERVICES.map(s => `<article class="svc"><span class="pend">Pendiente de confirmación</span><h3>${s.n}</h3><p>${s.d}</p>
@@ -270,8 +266,9 @@ function init() {
   $('#rform').addEventListener('input', hideRepair);
   $('#rOpen').addEventListener('click', () => { if (repairText) openWhatsApp(repairText); });
 
-  renderBundles(); renderAll(); renderCart();
+  renderOffers(); renderAll(); renderCart();
 }
 
 //--------
+loadCatalog();
 init();
